@@ -6,6 +6,7 @@ import javax.swing.border.EmptyBorder;
 
 import gr.aueb.cf.schoolapp.Main;
 import gr.aueb.cf.schoolapp.model.City;
+import gr.aueb.cf.schoolapp.util.DBUtil;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -202,9 +203,10 @@ public class InsertPage extends JFrame {
 				
 				String sql = "INSERT INTO teachers (firstname, lastname, vat, fathername, phone_num, email, street, street_num, zipcode, city_id, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //? είναι PlaceHolder
 				
-				Connection connection = Dashboard.getConnection();
+//				Connection connection = Dashboard.getConnection();
 				
-				try (PreparedStatement ps = connection.prepareStatement(sql)) {
+				try (Connection connection = DBUtil.getConnection();
+					 PreparedStatement ps = connection.prepareStatement(sql)) {
 					
 					ps.setString(1, firstname);
 					ps.setString(2, lastname);
