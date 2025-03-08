@@ -72,8 +72,8 @@ public class InsertPage extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-				cities = fetchCitiesFromDatabase();
-				cities.forEach(city -> cityComboBox.addItem(city));
+//				cities = fetchCitiesFromDatabase();
+//				cities.forEach(city -> cityComboBox.addItem(city));
 				textName.setText("");
 				textLastname.setText("");
 				textTaxNo.setText("");
@@ -83,7 +83,7 @@ public class InsertPage extends JFrame {
 				textAddress.setText("");
 				textAddressNo.setText("");
 				textZipNo.setText("");
-				cityComboBox.setSelectedIndex(0);
+//				cityComboBox.setSelectedIndex(0);
 				textNameError.setText("");
 				textLastnameError.setText("");
 				textTaxError.setText("");
@@ -179,57 +179,57 @@ public class InsertPage extends JFrame {
 				String street = textAddress.getText().trim();
 				String streetNumber = textAddressNo.getText().trim();
 				String zipCode = textZipNo.getText().trim();
-				City selectedCity = (City)cityComboBox.getSelectedItem();
-				int cityId = selectedCity.getId();
+//				City selectedCity = (City)cityComboBox.getSelectedItem();
+//				int cityId = selectedCity.getId();
 				
-				// Validation (να δω ifs αν είναι κενά κλπ)
+//				// Validation (να δω ifs αν είναι κενά κλπ)
+//
+//				textNameError.setText(firstname.equals("") ? "Το όνομα είναι υποχρεωτικό" : "");
+//				textLastnameError.setText(lastname.equals("") ? "Το επώνυμο είναι υποχρεωτικό" : "");
+//				textTaxError.setText(vat.equals("") ? "Το Α.Φ.Μ. είναι υποχρεωτικό" : "");
+//				textFatherNameError.setText(fathername.equals("") ? "Το πατρώνυμο είναι υποχρεωτικό" : "");
+//				textPhoneError.setText(phoneNumber.equals("") ? "Το τηλέφωνο είναι υποχρεωτικό" : "");
+//				textEmailError.setText(email.equals("") ? "Το email είναι υποχρεωτικό" : "");
+//				textAddressError.setText(street.equals("") ? "Η οδός είναι υποχρεωτική" : "");
+//				textAddressNoError.setText(streetNumber.equals("") ? "Ο αριθμός οδού είναι υποχρεωτικός" : "");
+//				textZipNoError.setText(zipCode.equals("") ? "Ο Τ.Κ. είναι υποχρεωτικός" : "");
 				
-				textNameError.setText(firstname.equals("") ? "Το όνομα είναι υποχρεωτικό" : "");
-				textLastnameError.setText(lastname.equals("") ? "Το επώνυμο είναι υποχρεωτικό" : "");
-				textTaxError.setText(vat.equals("") ? "Το Α.Φ.Μ. είναι υποχρεωτικό" : "");
-				textFatherNameError.setText(fathername.equals("") ? "Το πατρώνυμο είναι υποχρεωτικό" : "");
-				textPhoneError.setText(phoneNumber.equals("") ? "Το τηλέφωνο είναι υποχρεωτικό" : "");
-				textEmailError.setText(email.equals("") ? "Το email είναι υποχρεωτικό" : "");
-				textAddressError.setText(street.equals("") ? "Η οδός είναι υποχρεωτική" : "");
-				textAddressNoError.setText(streetNumber.equals("") ? "Ο αριθμός οδού είναι υποχρεωτικός" : "");
-				textZipNoError.setText(zipCode.equals("") ? "Ο Τ.Κ. είναι υποχρεωτικός" : "");
-				
-				if(selectedCity == null || firstname.equals("") || lastname.equals("") || vat.equals("") || fathername.equals("") || phoneNumber.equals("") || email.equals("") || street.equals("") || streetNumber.equals("") || zipCode.equals("")) {
-					JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε όλα τα πεδία!", "Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
+//				if(selectedCity == null || firstname.equals("") || lastname.equals("") || vat.equals("") || fathername.equals("") || phoneNumber.equals("") || email.equals("") || street.equals("") || streetNumber.equals("") || zipCode.equals("")) {
+//					JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε όλα τα πεδία!", "Error", JOptionPane.ERROR_MESSAGE);
+//					return;
+//				}
 				
 				// Insert
 				
-				String sql = "INSERT INTO teachers (firstname, lastname, vat, fathername, phone_num, email, street, street_num, zipcode, city_id, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //? είναι PlaceHolder
+//				String sql = "INSERT INTO teachers (firstname, lastname, vat, fathername, phone_num, email, street, street_num, zipcode, city_id, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //? είναι PlaceHolder
 				
 //				Connection connection = Dashboard.getConnection();
 				
-				try (Connection connection = DBUtil.getConnection();
-					 PreparedStatement ps = connection.prepareStatement(sql)) {
-					
-					ps.setString(1, firstname);
-					ps.setString(2, lastname);
-					ps.setString(3, vat);
-					ps.setString(4, fathername);
-					ps.setString(5, phoneNumber);
-					ps.setString(6, email);
-					ps.setString(7, street);
-					ps.setString(8, streetNumber);
-					ps.setString(9, zipCode);
-					ps.setInt(10, cityId);
-					
-					String uuid = UUID.randomUUID().toString();
-					ps.setString(11, uuid);
-					
-					int n = ps.executeUpdate();
-					
-					JOptionPane.showMessageDialog(null, n + "record(s) inserted", "INSERT", JOptionPane.PLAIN_MESSAGE);
-					
-				} catch (SQLException e1) {
-					// e1.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Λάθος στην εισαγωγή", "Error.", JOptionPane.ERROR_MESSAGE);
-				}
+//				try (Connection connection = DBUtil.getConnection();
+//					 PreparedStatement ps = connection.prepareStatement(sql)) {
+//
+//					ps.setString(1, firstname);
+//					ps.setString(2, lastname);
+//					ps.setString(3, vat);
+//					ps.setString(4, fathername);
+//					ps.setString(5, phoneNumber);
+//					ps.setString(6, email);
+//					ps.setString(7, street);
+//					ps.setString(8, streetNumber);
+//					ps.setString(9, zipCode);
+//					ps.setInt(10, cityId);
+//
+//					String uuid = UUID.randomUUID().toString();
+//					ps.setString(11, uuid);
+//
+//					int n = ps.executeUpdate();
+//
+//					JOptionPane.showMessageDialog(null, n + "record(s) inserted", "INSERT", JOptionPane.PLAIN_MESSAGE);
+//
+//				} catch (SQLException e1) {
+//					// e1.printStackTrace();
+//					JOptionPane.showMessageDialog(null, "Λάθος στην εισαγωγή", "Error.", JOptionPane.ERROR_MESSAGE);
+//				}
 			}
 		});
 		btnSubmit.setForeground(Color.WHITE);
@@ -516,25 +516,27 @@ public class InsertPage extends JFrame {
 	}
 	
 	private List<City> fetchCitiesFromDatabase() {
-		String SQL = "SELECT * FROM cities ORDER BY name ASC";
-		List<City> cities = new ArrayList<>();
-		
-		Connection connection = Dashboard.getConnection();
-		
-		try(PreparedStatement ps = connection.prepareStatement(SQL)) {  // Δυναμικό, δίνει ο χρήστης
-			ResultSet rs = ps.executeQuery();   // Υλοποιεί τα αποτελεσματα που φερνει το query
-			
-			while(rs.next()) {
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
-				
-				City city = new City(id, name);
-				cities.add(city);
-			}
-		} catch(SQLException e) {
-			JOptionPane.showMessageDialog(null, "Select cities error", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		return cities;
+//		String SQL = "SELECT * FROM cities ORDER BY name ASC";
+//		List<City> cities = new ArrayList<>();
+//
+//		Connection connection = Dashboard.getConnection();
+//
+//		try(Connection connection = DBUtil.getConnection();
+//			PreparedStatement ps = connection.prepareStatement(SQL)) {  // Δυναμικό, δίνει ο χρήστης
+//			ResultSet rs = ps.executeQuery();   // Υλοποιεί τα αποτελεσματα που φερνει το query
+//
+//			while(rs.next()) {
+//				int id = rs.getInt("id");
+//				String name = rs.getString("name");
+//
+//				City city = new City(id, name);
+//				cities.add(city);
+//			}
+//		} catch(SQLException e) {
+//			JOptionPane.showMessageDialog(null, "Select cities error", "Error", JOptionPane.ERROR_MESSAGE);
+//		}
+//
+//		return cities;
+		return null;
 	}
 }

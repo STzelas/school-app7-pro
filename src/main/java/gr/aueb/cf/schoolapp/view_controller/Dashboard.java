@@ -217,7 +217,7 @@ public class Dashboard extends JFrame {
 	}
 
 
-	public static Connection getConnection() {
-		return connection;
-	}	
+//	public static Connection getConnection() {
+//		return connection;
+//	}
 }
