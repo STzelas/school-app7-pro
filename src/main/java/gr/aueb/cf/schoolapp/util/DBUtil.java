@@ -24,12 +24,12 @@ public class DBUtil {
 
     public static Connection getConnection() throws SQLException {
         connection = ds.getConnection();
-        System.out.println("Connection created");
+//        System.out.println("Connection created");
         return connection;
     }
 
 
-    public static void closeConnection() throws SQLException {
-        if (connection != null) connection.close();
-    }
+//    public static void closeConnection() throws SQLException {
+//        if (connection != null) connection.close();
+//    }
 }
