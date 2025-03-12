@@ -5,8 +5,22 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import gr.aueb.cf.schoolapp.Main;
+import gr.aueb.cf.schoolapp.dao.CityDAOImpl;
+import gr.aueb.cf.schoolapp.dao.ICityDAO;
+import gr.aueb.cf.schoolapp.dao.ITeacherDAO;
+import gr.aueb.cf.schoolapp.dao.TeacherDAOImpl;
+import gr.aueb.cf.schoolapp.dao.exceptions.CityDAOException;
+import gr.aueb.cf.schoolapp.dao.exceptions.TeacherDAOException;
+import gr.aueb.cf.schoolapp.dto.TeacherInsertDTO;
+import gr.aueb.cf.schoolapp.dto.TeacherReadOnlyDTO;
+import gr.aueb.cf.schoolapp.exceptions.TeacherAlreadyExistsException;
 import gr.aueb.cf.schoolapp.model.City;
+import gr.aueb.cf.schoolapp.service.CityServiceImpl;
+import gr.aueb.cf.schoolapp.service.ICityService;
+import gr.aueb.cf.schoolapp.service.ITeacherService;
+import gr.aueb.cf.schoolapp.service.TeacherServiceImpl;
 import gr.aueb.cf.schoolapp.util.DBUtil;
+import gr.aueb.cf.schoolapp.validator.TeacherValidator;
 
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -17,6 +31,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -67,34 +82,22 @@ public class InsertPage extends JFrame {
 	private JComboBox<City> cityComboBox;
 	private List<City> cities = new ArrayList<>();
 
+	private final ITeacherDAO teacherDAO = new TeacherDAOImpl();
+	private final ITeacherService teacherService = new TeacherServiceImpl(teacherDAO);
+
+	private final ICityDAO cityDAO = new CityDAOImpl();
+	private final ICityService cityService = new CityServiceImpl(cityDAO);
+
 	
 	public InsertPage() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent e) {
-//				cities = fetchCitiesFromDatabase();
-//				cities.forEach(city -> cityComboBox.addItem(city));
-				textName.setText("");
-				textLastname.setText("");
-				textTaxNo.setText("");
-				textFatherName.setText("");
-				textPhoneNumber.setText("");
-				textEmail.setText("");
-				textAddress.setText("");
-				textAddressNo.setText("");
-				textZipNo.setText("");
-//				cityComboBox.setSelectedIndex(0);
-				textNameError.setText("");
-				textLastnameError.setText("");
-				textTaxError.setText("");
-				textFatherNameError.setText("");
-				textPhoneError.setText("");
-				textEmailError.setText("");
-				textAddressError.setText("");
-				textAddressNoError.setText("");
-				textZipNoError.setText("");
-				
-				
+				try {
+					cityService.getAllCities().forEach(cityComboBox::addItem);
+				} catch (CityDAOException ex) {
+					JOptionPane.showMessageDialog(null, "Get cities fatal error" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -168,68 +171,38 @@ public class InsertPage extends JFrame {
 		JButton btnSubmit = new JButton("Υποβολή");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(btnSubmit, "Successfully Submitted");
+
+				TeacherReadOnlyDTO teacherReadOnlyDTO;
+				TeacherInsertDTO insertDTO;
 				// Data binding (παίρνω τα data και τα βάζω σε δικές μου μεταβλητές)
-				String firstname = textName.getText().trim();
-				String lastname = textLastname.getText().trim();
-				String vat = textTaxNo.getText().trim();
-				String fathername = textFatherName.getText().trim();
-				String phoneNumber = textPhoneNumber.getText().trim();
-				String email = textEmail.getText().trim();
-				String street = textAddress.getText().trim();
-				String streetNumber = textAddressNo.getText().trim();
-				String zipCode = textZipNo.getText().trim();
-//				City selectedCity = (City)cityComboBox.getSelectedItem();
-//				int cityId = selectedCity.getId();
-				
-//				// Validation (να δω ifs αν είναι κενά κλπ)
-//
-//				textNameError.setText(firstname.equals("") ? "Το όνομα είναι υποχρεωτικό" : "");
-//				textLastnameError.setText(lastname.equals("") ? "Το επώνυμο είναι υποχρεωτικό" : "");
-//				textTaxError.setText(vat.equals("") ? "Το Α.Φ.Μ. είναι υποχρεωτικό" : "");
-//				textFatherNameError.setText(fathername.equals("") ? "Το πατρώνυμο είναι υποχρεωτικό" : "");
-//				textPhoneError.setText(phoneNumber.equals("") ? "Το τηλέφωνο είναι υποχρεωτικό" : "");
-//				textEmailError.setText(email.equals("") ? "Το email είναι υποχρεωτικό" : "");
-//				textAddressError.setText(street.equals("") ? "Η οδός είναι υποχρεωτική" : "");
-//				textAddressNoError.setText(streetNumber.equals("") ? "Ο αριθμός οδού είναι υποχρεωτικός" : "");
-//				textZipNoError.setText(zipCode.equals("") ? "Ο Τ.Κ. είναι υποχρεωτικός" : "");
-				
-//				if(selectedCity == null || firstname.equals("") || lastname.equals("") || vat.equals("") || fathername.equals("") || phoneNumber.equals("") || email.equals("") || street.equals("") || streetNumber.equals("") || zipCode.equals("")) {
-//					JOptionPane.showMessageDialog(null, "Παρακαλώ συμπληρώστε όλα τα πεδία!", "Error", JOptionPane.ERROR_MESSAGE);
+
+				insertDTO = doDataBinding();
+
+				// Validation (να δω ifs αν είναι κενά κλπ) temporary not working
+
+//				Map<String, String> errors = TeacherValidator.validate(insertDTO);
+//				if (!errors.isEmpty()) {
+//					textNameError.setText(errors.getOrDefault("firstname", ""));
+//					textLastnameError.setText(errors.getOrDefault("lastname", ""));
+//					textAddressError.setText(errors.getOrDefault("street", ""));
+//					textAddressNoError.setText(errors.getOrDefault("streetNum", ""));
+//					textEmailError.setText(errors.getOrDefault("email", ""));
+//					textFatherNameError.setText(errors.getOrDefault("fathername", ""));
+//					textZipNoError.setText(errors.getOrDefault("zipcode", ""));
+//					textPhoneError.setText(errors.getOrDefault("phoneNum", ""));
+//					textTaxError.setText(errors.getOrDefault("vat", ""));
 //					return;
 //				}
-				
-				// Insert
-				
-//				String sql = "INSERT INTO teachers (firstname, lastname, vat, fathername, phone_num, email, street, street_num, zipcode, city_id, uuid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; //? είναι PlaceHolder
-				
-//				Connection connection = Dashboard.getConnection();
-				
-//				try (Connection connection = DBUtil.getConnection();
-//					 PreparedStatement ps = connection.prepareStatement(sql)) {
-//
-//					ps.setString(1, firstname);
-//					ps.setString(2, lastname);
-//					ps.setString(3, vat);
-//					ps.setString(4, fathername);
-//					ps.setString(5, phoneNumber);
-//					ps.setString(6, email);
-//					ps.setString(7, street);
-//					ps.setString(8, streetNumber);
-//					ps.setString(9, zipCode);
-//					ps.setInt(10, cityId);
-//
-//					String uuid = UUID.randomUUID().toString();
-//					ps.setString(11, uuid);
-//
-//					int n = ps.executeUpdate();
-//
-//					JOptionPane.showMessageDialog(null, n + "record(s) inserted", "INSERT", JOptionPane.PLAIN_MESSAGE);
-//
-//				} catch (SQLException e1) {
-//					// e1.printStackTrace();
-//					JOptionPane.showMessageDialog(null, "Λάθος στην εισαγωγή", "Error.", JOptionPane.ERROR_MESSAGE);
-//				}
+
+				// insert
+
+				try {
+					teacherReadOnlyDTO = teacherService.insertTeacher(insertDTO);
+					JOptionPane.showMessageDialog(null, "Teacher with uuid: " + teacherReadOnlyDTO.getUuid(), "Insert", JOptionPane.INFORMATION_MESSAGE);
+					// todo form instead of message dialog
+				} catch (TeacherDAOException | TeacherAlreadyExistsException ex) {
+					JOptionPane.showMessageDialog(null, "Error." + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnSubmit.setForeground(Color.WHITE);
@@ -538,5 +511,23 @@ public class InsertPage extends JFrame {
 //
 //		return cities;
 		return null;
+	}
+
+	private TeacherInsertDTO doDataBinding() {
+		final int DEFAULT_CITY_ID = 1;
+
+		String firstname = textName.getText().trim();
+		String lastname = textLastname.getText().trim();
+		String vat = textTaxNo.getText().trim();
+		String fathername = textFatherName.getText().trim();
+		String phoneNumber = textPhoneNumber.getText().trim();
+		String email = textEmail.getText().trim();
+		String street = textAddress.getText().trim();
+		String streetNumber = textAddressNo.getText().trim();
+		City selectedCity = (City)cityComboBox.getSelectedItem();
+		int cityId = (selectedCity != null ) ? selectedCity.getId() : DEFAULT_CITY_ID;
+		String zipCode = textZipNo.getText().trim();
+
+		return new TeacherInsertDTO(firstname, lastname, vat, fathername, phoneNumber, email, street, streetNumber, zipCode, cityId);
 	}
 }
