@@ -55,40 +55,6 @@ public class TeacherValidator<T> {
             errors.put("lastname", "Lastname must not include spaces");
         }
 
-//        if (dto.getVat().matches("^.*\\s+.*$")) {
-//            errors.put("vat", "Vat must not include spaces");
-//        }
-//
-//        if (dto.getFathername().matches("^.*\\s+.*$")) {
-//            errors.put("fathername", "Fathername must not include spaces");
-//        }
-//
-//        if (dto.getEmail().matches("^.*\\s+.*$")) {
-//            errors.put("email", "Email must not include spaces");
-//        }
-//
-//        if (dto.getPhoneNum().matches("^.*\\s+.*$")) {
-//            errors.put("phoneNum", "Phone numbers must not include spaces");
-//        }
-//
-//        if (dto.getStreet().matches("^.*\\s+.*$")) {
-//            errors.put("street", "Street must not include spaces");
-//        }
-//
-//        if (dto.getStreetNum().matches("^.*\\s+.*$")) {
-//            errors.put("streetNum", "Street number must not include spaces");
-//        }
-//
-//        if (dto.getZipcode().matches("^.*\\s+.*$")) {
-//            errors.put("zipcode", "Zip code must not include spaces");
-//        }
-
-//        // validate email
-//
-//        if (dto.getEmail().matches("\\w*\\.?\\w+\\w+\\.[a-z]{2,4}")) {
-//            errors.put("email", "Email must contain '@'");
-//        }
-
         return errors;
     }
 }
